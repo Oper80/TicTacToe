@@ -1,0 +1,24 @@
+
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Settings">
+
+        <EditTextPreference
+            app:title="Enter you name"
+            app:key="name"/>
+
+        <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/levels"
+            app:entryValues="@array/levels_values"
+            app:key="level"
+            app:title="AI level"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:key="humanIsX"
+            app:summaryOff="You play with O"
+            app:summaryOn="You play with X"
+            app:title="Choose the side" />
+    </PreferenceCategory>
+</PreferenceScreen>
