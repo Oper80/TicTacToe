@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menuNew"
-          android:title="@string/menuNew"
-    />
-    <item android:id="@+id/menuSettings"
-          android:title="@string/menuSettings"
-    />
-    <item android:id="@+id/menuExit"
-          android:title="@string/menuExit"
-    />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/menuNew"
+        android:title="@string/menuNew"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/menuSettings"
+        android:title="@string/menuSettings"
+        app:showAsAction="collapseActionView"/>
+    <item
+        android:id="@+id/menuExit"
+        android:title="@string/menuExit"
+        app:showAsAction="collapseActionView"/>
 </menu>

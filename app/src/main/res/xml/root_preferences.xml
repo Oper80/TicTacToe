@@ -4,11 +4,12 @@
     <PreferenceCategory app:title="Settings">
 
         <EditTextPreference
-            app:title="Enter you name"
-            app:key="name"/>
+            app:dialogTitle="Name"
+            app:key="name"
+            app:title="Enter you name"/>
 
         <ListPreference
-            app:defaultValue="1"
+            app:defaultValue="Easy"
             app:entries="@array/levels"
             app:entryValues="@array/levels_values"
             app:key="level"

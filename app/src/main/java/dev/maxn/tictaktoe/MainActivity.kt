@@ -1,28 +1,29 @@
 package dev.maxn.tictaktoe
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.provider.SyncStateContract.Helpers.update
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.system.exitProcess
+import androidx.appcompat.widget.PopupMenu
 
 
 class MainActivity : AppCompatActivity() {
+    val GAMEOVER_DIALOG_TAG = "game_over"
     private lateinit var viewModel: MainViewModel
     private var cells: List<ImageView> = listOf()
+    private var dialog: GameOver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
         initViewModel()
         initViews()
     }
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                     cells[i].setOnClickListener {
 
                         cells[i].setBackgroundResource(viewModel.getDrawable())
-                        val animation =  cells[i].background as AnimationDrawable
+                        val animation = cells[i].background as AnimationDrawable
                         animation.start()
                         viewModel.move(i)
                     }
@@ -59,29 +60,39 @@ class MainActivity : AppCompatActivity() {
                 "x" -> {
                     cells[i].isClickable = false
                     cells[i].setBackgroundResource(R.drawable.anim_x)
-                    val animation =  cells[i].background as AnimationDrawable
+                    val animation = cells[i].background as AnimationDrawable
                     animation.start()
                 }
                 "0" -> {
                     cells[i].isClickable = false
                     cells[i].setBackgroundResource(R.drawable.anim_o)
-                    val animation =  cells[i].background as AnimationDrawable
+                    val animation = cells[i].background as AnimationDrawable
                     animation.start()
                 }
             }
         }
+        verifyGame()
+    }
+
+    private fun verifyGame() {
+        var message = ""
         if (viewModel.isClosed()) {
-            val message = when {
+            message = when {
                 viewModel.isWinner() -> "You win!"
                 else -> "You lose!"
             }
-            Toast.makeText(App.applicationContext(), message, Toast.LENGTH_LONG).show()
             for ((i, x) in viewModel.getBoard().withIndex()) {
                 cells[i].isClickable = false
             }
         } else {
             if (viewModel.isFull()) {
-                Toast.makeText(App.applicationContext(), "Draw", Toast.LENGTH_LONG).show()
+                message = "Draw"
+            }
+        }
+        if (message.isNotEmpty()){
+            if(dialog == null) {
+                dialog = GameOver.newInstance(this, message)
+                dialog?.show(supportFragmentManager, GAMEOVER_DIALOG_TAG)
             }
         }
     }
@@ -94,8 +105,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.menuNew -> {
-                viewModel.initNewGame()
-                updateUi()
+                startNewGame()
                 true
             }
             R.id.menuSettings -> {
@@ -114,5 +124,14 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun startNewGame() {
+        dialog = null
+        viewModel.initNewGame()
+        updateUi()
+    }
 
+    override fun onPause() {
+        dialog?.dismiss()
+        super.onPause()
+    }
 }

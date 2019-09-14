@@ -21,4 +21,7 @@
     <string name="menuNew">New game</string>
     <string name="menuExit">Exit</string>
     <string name="menuSettings">Settings</string>
+    <string name="game_over_title">Game Over</string>
+    <string name="new_game">New game</string>
+    <string name="cancel">Cancel</string>
 </resources>

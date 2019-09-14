@@ -14,9 +14,9 @@ class MainViewModel : ViewModel() {
 
     private lateinit var game: Game
     private var state: MutableLiveData<MutableList<Cell>> = mutableLiveData(mutableListOf())
-    private  var human : String
-    private  var robot : String
-    private var depth : Int
+    private var human: String
+    private var robot: String
+    private var depth: Int
     private val prefs: SharedPreferences by lazy {
         val ctx = App.applicationContext()
         PreferenceManager.getDefaultSharedPreferences(ctx)
@@ -34,28 +34,26 @@ class MainViewModel : ViewModel() {
         if (getFirstMove() == "human") humanMove() else robotMove()
     }
 
-
-
     fun isFull(): Boolean {
         return game.isFull()
     }
 
     fun getDrawable(): Int {
-        return if(human == "x") R.drawable.anim_x else R.drawable.anim_o
+        return if (human == "x") R.drawable.anim_x else R.drawable.anim_o
     }
 
-    private fun updatePrefs(){
+    private fun updatePrefs() {
         human = if (prefs.getBoolean(humanIsX, true)) "x" else "0"
         robot = if (prefs.getBoolean(humanIsX, false)) "0" else "x"
         depth = prefs.getString(LEVEL, "1")!!.toInt()
     }
 
-    fun isPrefsChanged(): Boolean{
+    fun isPrefsChanged(): Boolean {
         updatePrefs()
         return game.human != human || game.initDepth != depth
     }
 
-    fun initNewGame(){
+    fun initNewGame() {
         updatePrefs()
         game = Game(human, robot, depth)
         state.value = game.board.value
@@ -80,11 +78,11 @@ class MainViewModel : ViewModel() {
         return if (humanMove) "human" else "robot"
     }
 
-    fun isWinner(): Boolean{
+    fun isWinner(): Boolean {
         return game.isWinner
     }
 
-    fun isClosed():Boolean{
+    fun isClosed(): Boolean {
         return game.isClosed
     }
 
