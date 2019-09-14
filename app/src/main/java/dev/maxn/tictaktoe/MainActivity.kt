@@ -2,6 +2,7 @@ package dev.maxn.tictaktoe
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.provider.SyncStateContract.Helpers.update
 import android.view.Menu
@@ -11,17 +12,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
-
-    private val prefs: SharedPreferences by lazy {
-        val ctx = App.applicationContext()
-        PreferenceManager.getDefaultSharedPreferences(ctx)
-    }
     private var cells: List<ImageView> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +25,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initViewModel()
         initViews()
-        if (viewModel.getFirstMove() == "human") viewModel.humanMove() else viewModel.robotMove()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (viewModel.isPrefsChanged()) viewModel.initNewGame()
     }
 
     private fun initViews() {
@@ -48,18 +48,25 @@ class MainActivity : AppCompatActivity() {
             when (x.state) {
                 "" -> {
                     cells[i].setOnClickListener {
+
                         cells[i].setBackgroundResource(viewModel.getDrawable())
+                        val animation =  cells[i].background as AnimationDrawable
+                        animation.start()
                         viewModel.move(i)
                     }
                     cells[i].setBackgroundResource(R.drawable.empty)
                 }
                 "x" -> {
                     cells[i].isClickable = false
-                    cells[i].setBackgroundResource(R.drawable.x)
+                    cells[i].setBackgroundResource(R.drawable.anim_x)
+                    val animation =  cells[i].background as AnimationDrawable
+                    animation.start()
                 }
                 "0" -> {
                     cells[i].isClickable = false
-                    cells[i].setBackgroundResource(R.drawable.o)
+                    cells[i].setBackgroundResource(R.drawable.anim_o)
+                    val animation =  cells[i].background as AnimationDrawable
+                    animation.start()
                 }
             }
         }
@@ -96,8 +103,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.menuExit -> {
-                System.exit(0)
-                true
+                exitProcess(0)
             }
             else -> false
         }

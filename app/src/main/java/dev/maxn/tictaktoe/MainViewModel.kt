@@ -12,11 +12,11 @@ private const val humanIsX = "humanIsX"
 
 class MainViewModel : ViewModel() {
 
-    private var game: Game
+    private lateinit var game: Game
     private var state: MutableLiveData<MutableList<Cell>> = mutableLiveData(mutableListOf())
-    private val human : String
-    private val robot : String
-    private val depth : Int
+    private  var human : String
+    private  var robot : String
+    private var depth : Int
     private val prefs: SharedPreferences by lazy {
         val ctx = App.applicationContext()
         PreferenceManager.getDefaultSharedPreferences(ctx)
@@ -26,20 +26,40 @@ class MainViewModel : ViewModel() {
         human = if (prefs.getBoolean(humanIsX, true)) "x" else "0"
         robot = if (prefs.getBoolean(humanIsX, false)) "0" else "x"
         depth = prefs.getString(LEVEL, "1")!!.toInt()
-        game = Game(human, robot, depth)
+        val isNew = state.value != null
+        game = if (isNew) Game(human, robot, depth)
+        else Game(human, robot, depth, state.value!!)
         state.value = game.board.value
+
+        if (getFirstMove() == "human") humanMove() else robotMove()
     }
+
+
 
     fun isFull(): Boolean {
         return game.isFull()
     }
 
     fun getDrawable(): Int {
-        return if(human == "x") R.drawable.x else R.drawable.o
+        return if(human == "x") R.drawable.anim_x else R.drawable.anim_o
+    }
+
+    private fun updatePrefs(){
+        human = if (prefs.getBoolean(humanIsX, true)) "x" else "0"
+        robot = if (prefs.getBoolean(humanIsX, false)) "0" else "x"
+        depth = prefs.getString(LEVEL, "1")!!.toInt()
+    }
+
+    fun isPrefsChanged(): Boolean{
+        updatePrefs()
+        return game.human != human || game.initDepth != depth
     }
 
     fun initNewGame(){
+        updatePrefs()
         game = Game(human, robot, depth)
+        state.value = game.board.value
+        if (getFirstMove() == "human") humanMove() else robotMove()
     }
 
     fun getState(): LiveData<MutableList<Cell>> {
