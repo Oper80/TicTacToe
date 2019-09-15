@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.system.exitProcess
-import androidx.appcompat.widget.PopupMenu
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.isPrefsChanged()) viewModel.initNewGame()
+        if (viewModel.isPrefsChanged()) startNewGame()
     }
 
     private fun initViews() {
@@ -81,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.isWinner() -> "You win!"
                 else -> "You lose!"
             }
-            for ((i, x) in viewModel.getBoard().withIndex()) {
+            for (i in 0 until viewModel.getBoard().size) {
                 cells[i].isClickable = false
             }
         } else {
