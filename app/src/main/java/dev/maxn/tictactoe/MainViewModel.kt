@@ -1,4 +1,4 @@
-package dev.maxn.tictaktoe
+package dev.maxn.tictactoe
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
@@ -12,8 +12,9 @@ private const val humanIsX = "humanIsX"
 
 class MainViewModel : ViewModel() {
 
-    private lateinit var game: Game
-    private var state: MutableLiveData<MutableList<Cell>> = mutableLiveData(mutableListOf())
+    private var game: Game
+    private var state: MutableLiveData<MutableList<Cell>> =
+        mutableLiveData(mutableListOf())
     private var human: String
     private var robot: String
     private var depth: Int
@@ -24,7 +25,7 @@ class MainViewModel : ViewModel() {
 
     init {
         human = if (prefs.getBoolean(humanIsX, true)) "x" else "0"
-        robot = if (prefs.getBoolean(humanIsX, false)) "0" else "x"
+        robot = if (human == "x") "0" else "x"
         depth = prefs.getString(LEVEL, "1")!!.toInt()
         val isNew = state.value != null
         game = if (isNew) Game(human, robot, depth)
@@ -44,7 +45,7 @@ class MainViewModel : ViewModel() {
 
     private fun updatePrefs() {
         human = if (prefs.getBoolean(humanIsX, true)) "x" else "0"
-        robot = if (prefs.getBoolean(humanIsX, false)) "0" else "x"
+        robot = if (human == "x") "0" else "x"
         depth = prefs.getString(LEVEL, "1")!!.toInt()
     }
 
@@ -106,5 +107,21 @@ class MainViewModel : ViewModel() {
         game.move(i, human)
         robotMove()
         state.value = game.board.value
+    }
+
+    fun getCPUName(): String {
+        val level = prefs.getString(LEVEL, "1")
+        val names = App.applicationContext().resources.getStringArray(
+            R.array.levels
+        )
+        val levels = App.applicationContext().resources.getStringArray(
+            R.array.levels_values
+        )
+        val i = levels.indexOf(level)
+        return "AI level: ${names[i]}"
+    }
+
+    fun getPlayerName(): String {
+        return "Player: ${prefs.getString(NAME, null) ?: ""}"
     }
 }

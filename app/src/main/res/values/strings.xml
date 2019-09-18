@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TicTakToe</string>
+    <string name="app_name">TicTacToe</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->

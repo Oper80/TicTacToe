@@ -1,4 +1,4 @@
-package dev.maxn.tictaktoe
+package dev.maxn.tictactoe
 
 import android.app.Application
 import android.content.Context

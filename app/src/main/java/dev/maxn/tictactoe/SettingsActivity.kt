@@ -1,4 +1,4 @@
-package dev.maxn.tictaktoe
+package dev.maxn.tictactoe
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -14,7 +14,10 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.settings, SettingsFragment())
+            .replace(
+                R.id.settings,
+                SettingsFragment()
+            )
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

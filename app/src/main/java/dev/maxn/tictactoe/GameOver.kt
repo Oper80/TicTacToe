@@ -1,4 +1,4 @@
-package dev.maxn.tictaktoe
+package dev.maxn.tictactoe
 
 import android.app.Dialog
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package dev.maxn.tictaktoe
+package dev.maxn.tictactoe
 
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
@@ -12,9 +12,10 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.system.exitProcess
 
+private const val GAMEOVER_DIALOG_TAG = "game_over"
 
 class MainActivity : AppCompatActivity() {
-    val GAMEOVER_DIALOG_TAG = "game_over"
+
     private lateinit var viewModel: MainViewModel
     private var cells: List<ImageView> = listOf()
     private var dialog: GameOver? = null
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUi() {
+        tv_player_1.text = viewModel.getCPUName()
+        tv_player_2.text = viewModel.getPlayerName()
         for ((i, x) in viewModel.getBoard().withIndex()) {
             when (x.state) {
                 "" -> {

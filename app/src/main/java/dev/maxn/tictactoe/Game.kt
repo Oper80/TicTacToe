@@ -1,4 +1,4 @@
-package dev.maxn.tictaktoe
+package dev.maxn.tictactoe
 
 import androidx.lifecycle.MutableLiveData
 import java.lang.Math.pow
@@ -19,7 +19,8 @@ class Game(
     private var score = 0.0
     var recursiveScore = 0
     var isWinner = false
-    var board: MutableLiveData<MutableList<Cell>> = mutableLiveData(mutableListOf())
+    var board: MutableLiveData<MutableList<Cell>> =
+        mutableLiveData(mutableListOf())
     var bestMove = -1
 
     init {
